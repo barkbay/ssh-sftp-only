@@ -1,0 +1,14 @@
+---
+# This playbook deploys SFTP servers
+
+- hosts: mysftpserver.example.com
+  vars:
+    - servers:
+        alice:
+          port: 5122
+        bob:
+          port: 5123
+
+  remote_user: root
+  roles:
+    - { role: sftp-server }

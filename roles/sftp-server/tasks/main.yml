@@ -1,0 +1,16 @@
+- name: Ensure OpenSSH server is installed
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - openssh-server
+
+- name: Generate pub/priv key pair
+  shell: ssh-keygen -q -t rsa -f /etc/ssh/ssh_host_{{ item.key }}_rsa_key -N ''
+  args:
+    creates: /etc/ssh/ssh_host_{{ item.key }}_rsa_key
+  with_dict: "{{ servers }}"
+
+- name: Generate SFTP configuration file
+  template: src=etc/ssh/sshd_config.j2 dest=/etc/ssh/sshd_config_{{ item.key }}
+  with_dict: "{{ servers }}"
